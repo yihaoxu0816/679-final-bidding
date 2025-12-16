@@ -36,7 +36,7 @@ const registerUser = async (username, pword, displayName) => {
     const userData = {
         username, 
         password,
-        balance: 100,        // Initialize starting balance for bidding
+        balance: 10000,      // Initialize starting balance for bidding
         itemsWon: []         // Initialize empty items won array
     };
     

@@ -1,4 +1,4 @@
-import { Room } from '../room';
+import { Room } from '../room.js';
 import { User } from '../user';
 
 describe('Models', () => {
