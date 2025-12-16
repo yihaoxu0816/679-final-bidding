@@ -251,5 +251,11 @@ Backend server runs on `http://localhost:6790`
 - `.env` files (contain secrets and configuration)
 - `jwt.key` and `jwt.key.pub` (authentication keys)
 - `node_modules/` (dependencies)
+- `build/` or `client/build/` (compiled React artifacts)
 
 These are already listed in `.gitignore` to prevent accidental commits.
+
+**Note on Build Artifacts:** The React build output (`client/build/` or `server/client/build/`) should never be committed to version control. These files are:
+- Generated automatically during the build process
+- Large and frequently change, causing merge conflicts
+- Environment-specific and should be generated locally or during deployment
