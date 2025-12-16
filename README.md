@@ -75,13 +75,6 @@ JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
 -----END PUBLIC KEY-----"
 ```
 
-**Important:** 
-- Include the quotes around the key values
-- Preserve all line breaks and formatting from the key files
-- Include the BEGIN/END header lines
-
-**Note:** Currently, MongoDB settings are hardcoded in `src/db/db.js`. The .env file is optional unless you uncomment the environment variable code in that file.
-
 ### 4. Create Client `.env` File
 
 Create a file named `.env` in the `client/` directory:
@@ -96,9 +89,6 @@ Add the following content:
 ```env
 # For local development
 REACT_APP_API_URL=http://localhost:6790
-
-# For production, replace with your VM's external IP
-# REACT_APP_API_URL=http://<your-vm-ip>:6790
 ```
 
 ## Build
