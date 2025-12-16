@@ -2,6 +2,8 @@
 
 A full-stack real-time bidding platform built with Node.js, Express, React, MongoDB, and Socket.IO.
 
+> **📌 Note:** This is the **production-ready version** of the application. It is designed to run on GCP server at `http://34.61.176.150:6790` (Although not working properly). For the local-development version, please see the `main` branch.
+
 ## Deployed Site
 
 **Live Demo:** [http://34.61.176.150:6790](http://34.61.176.150:6790)
