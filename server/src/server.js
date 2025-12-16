@@ -1,6 +1,7 @@
 import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
 
 import express from 'express';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -14,6 +15,7 @@ import { socket } from './socket/clientUpdate.js';
 
 
 dotenv.config();
+const serverPath = process.env.SERVER_DIR || import.meta.dirname;
 
 const port = 6790;
 const app = express();
@@ -23,12 +25,26 @@ socket.initSocket(server);
 app.use(cors());
 
 app.use(express.json());
-app.use('/users', userRouter);
-app.use('/rooms', roomRouter);
-app.use('/bids', bidRouter);
-app.use('/auth', authRouter);
+app.use('/api/users', userRouter);
+app.use('/api/rooms', roomRouter);
+app.use('/api/bids', bidRouter);
+app.use('/api/auth', authRouter);
 
-// Error handler must be AFTER all routes
+app.use(
+  express.static(
+    path.join(serverPath, '../client/build')
+  )
+);
+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(
+    path.join(serverPath, '../client/build/index.html')
+  );
+});
+
 app.use(errorHandler);
 
 roomService.watchRooms();

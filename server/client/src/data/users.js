@@ -3,8 +3,8 @@ import { handleGet, handlePost, handleDelete, handlePatch } from './api.js';
 
 // Backend API URL - override the default from api.js
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:6790';
-const USERS_ENDPOINT = `${API_URL}/users`;
-const AUTH_ENDPOINT = `${API_URL}/auth`;
+const USERS_ENDPOINT = `${API_URL}/api/users`;
+const AUTH_ENDPOINT = `${API_URL}/api/auth`;
 
 /**
  * Get a user by their ID.

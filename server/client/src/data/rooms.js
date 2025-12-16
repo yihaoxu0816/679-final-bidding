@@ -3,8 +3,8 @@ import { handleGet, handlePost, handleDelete, handlePatch } from './api.js';
 
 // Backend API URL - override the default from api.js
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:6790';
-const ROOMS_ENDPOINT = `${API_URL}/rooms`;
-const USERS_ENDPOINT = `${API_URL}/users`;
+const ROOMS_ENDPOINT = `${API_URL}/api/rooms`;
+const USERS_ENDPOINT = `${API_URL}/api/users`;
 
 /**
  * Get all rooms with host names added (as opposed to just host ids)

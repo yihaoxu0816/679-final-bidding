@@ -1,8 +1,8 @@
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:6790';
-const ROOMS_ENDPOINT = `${API_URL}/rooms`;
-const USERS_ENDPOINT = `${API_URL}/users`;
-const AUTH_ENDPOINT = `${API_URL}/auth`;
-const BIDS_ENDPOINT = `${API_URL}/bids`;
+const ROOMS_ENDPOINT = `${API_URL}/api/rooms`;
+const USERS_ENDPOINT = `${API_URL}/api/users`;
+const AUTH_ENDPOINT = `${API_URL}/api/auth`;
+const BIDS_ENDPOINT = `${API_URL}/api/bids`;
 
 const buildUrlWithQuery = (url, queryParams) => {
   const params = new URLSearchParams(queryParams);
