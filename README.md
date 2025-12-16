@@ -2,11 +2,91 @@
 
 A full-stack real-time bidding platform built with Node.js, Express, React, MongoDB, and Socket.IO.
 
+> **📌 Note:** This is the **local development version** of the application. It is designed to run on your local machine only, with the frontend at `http://localhost:3000` and backend at `http://localhost:6790`. For the production-ready version with GCP deployment support, please see the `deploy` branch.
+
+
+## How to Use the Application
+
+### Getting Started
+
+1. **Register an Account**
+   - Click "Login" in the top navigation bar
+   - Click "Register" to create a new account
+   - Enter a username and password
+   - New users start with a balance of $100
+
+2. **Browse Bidding Rooms**
+   - The home page displays all available bidding rooms
+   - Each room shows:
+     - Host's name
+     - Item name and description
+     - Starting price
+     - Current highest bid
+     - Status (OPEN or CLOSED)
+   - Click on any room card to view details
+
+3. **View Room Details & Bid**
+   - See full item description and bidding history
+   - Place a bid higher than the current highest bid
+   - Your balance will be checked before placing a bid
+   - Watch real-time updates as other users bid
+   - Note: You cannot bid on your own rooms
+
+4. **Create a New Room**
+   - Go to your Profile page (click your username in top bar)
+   - Click "Create a Room" button
+   - Fill in:
+     - Item name
+     - Item description
+     - Starting price
+   - Your new room will appear on the home page
+
+5. **Manage Your Rooms**
+   - In your Profile, view all rooms you've hosted
+   - **Edit**: Modify room details (only for OPEN rooms)
+   - **Close**: End bidding and declare a winner
+   - **Delete**: Remove a room (only for OPEN rooms)
+   - Once closed, the highest bidder wins the item
+
+6. **Track Your Activity**
+   - **Balance**: Shows your current bidding balance (top bar)
+   - **Your Rooms**: All items you've put up for bidding
+   - **Items Won**: All auctions where you were the highest bidder when the room closed
+
+### Key Features
+- ✅ **Real-time Updates**: See new bids instantly without refreshing
+- ✅ **Balance Management**: Track your spending across all bids
+- ✅ **Bidding History**: View all bids placed on an item
+- ✅ **Room Management**: Full control over your hosted auctions
+- ✅ **Winner Determination**: Automatic winner selection when rooms close
+
 ## Prerequisites
 
 - Node.js (v18+)
 - MongoDB (v6+)
 - npm (v9+)
+
+## Project Structure
+
+```
+679-final-bidding/
+├── client/          # React frontend (separate directory)
+│   ├── src/
+│   ├── public/
+│   ├── .env        # Frontend environment variables
+│   └── package.json
+├── server/          # Node.js backend (separate directory)
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── middleware/
+│   │   └── server.js
+│   ├── .env        # Backend environment variables
+│   └── package.json
+└── README.md
+```
 
 ## Installation
 
@@ -22,135 +102,154 @@ npm install
 
 ## Environment Configuration
 
-### Server `.env` (in `server/` directory)
+### 1. Generate JWT Keys
+
+JWT keys are required for user authentication. Generate them in the `server/` directory:
+
+```bash
+cd server
+ssh-keygen -t rsa -b 4096 -m PEM -f jwt.key -N ""
+openssl rsa -in jwt.key -pubout -outform PEM -out jwt.key.pub
+```
+
+This creates two files:
+- `jwt.key` - Private key for signing tokens
+- `jwt.key.pub` - Public key for verifying tokens
+
+### 2. Create Environment Files
+
+#### Server `.env` (in `server/` directory)
+
+Create a `.env` file with the following:
 
 ```env
 MONGO_URI=mongodb://127.0.0.1:27017
 DB_NAME=bidding-platform
 PORT=6790
-NODE_ENV=production
+NODE_ENV=development
 ```
 
-### Client `.env` (in `client/` directory)
+Then add your JWT keys (copy the entire contents of the key files):
+
+```bash
+# View your private key
+cat jwt.key
+
+# View your public key
+cat jwt.key.pub
+```
+
+Add them to `.env`:
 
 ```env
-# Local development
-REACT_APP_API_URL=http://localhost:6790
+JWT_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+MIIJKAIBAAKCAgEA...
+[Copy ENTIRE contents of jwt.key here]
+...ending=
+-----END RSA PRIVATE KEY-----"
 
-# Production (update with your VM IP)
-REACT_APP_API_URL=http://<your-vm-ip>:6790
+JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0...
+[Copy ENTIRE contents of jwt.key.pub here]
+...Q==
+-----END PUBLIC KEY-----"
 ```
 
-## Build
+**Important**: The keys must be wrapped in quotes and include all lines (including BEGIN/END lines).
+
+#### Client `.env` (in `client/` directory)
+
+Create a `.env` file with:
+
+```env
+REACT_APP_API_URL=http://localhost:6790
+```
+
+## Running the Application
+
+**This application requires 3 terminal windows to run:**
+
+### Terminal 1: Start MongoDB
+
+```bash
+mongod
+```
+
+Keep this running in the background.
+
+### Terminal 2: Start Backend Server
+
+```bash
+cd server
+npm start
+```
+
+Backend runs at `http://localhost:6790`
+
+### Terminal 3: Start Frontend
 
 ```bash
 cd client
-npm run build
-```
-
-## Run Locally
-
-```bash
-# Start MongoDB
-mongod
-
-# Start backend (in server/)
-npm start
-
-# Start frontend (in client/)
 npm start
 ```
 
-Access at `http://localhost:3000`
+Frontend runs at `http://localhost:3000`
+
+### Access the Application
+
+Open your browser and go to: **`http://localhost:3000`**
+
+The frontend will proxy API requests to the backend at `http://localhost:6790`.
 
 ## Run Tests
 
-```bash
-cd server
-npm test
-npm test -- --coverage  # with coverage report
-```
-
-## Deploy to Google Cloud VM
-
-### 1. Create VM and Configure Firewall
-
-```bash
-gcloud compute instances create bidding-platform --zone=us-central1-a --machine-type=e2-medium --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud
-gcloud compute firewall-rules create allow-app --allow tcp:3000,tcp:6790
-```
-
-### 2. SSH and Install Dependencies
-
-```bash
-gcloud compute ssh bidding-platform --zone=us-central1-a
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install -y nodejs git
-
-# Install MongoDB
-wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-sudo apt update && sudo apt install -y mongodb-org
-sudo systemctl start mongod && sudo systemctl enable mongod
-
-# Install PM2
-sudo npm install -g pm2
-```
-
-### 3. Deploy Application
-
-```bash
-# Clone and install
-git clone <repository-url>
-cd 679-final-bidding
-
-cd server
-npm install
-# Create .env file with production settings
-
-cd ../client
-npm install
-# Update .env with VM IP
-npm run build
-```
-
-### 4. Start with PM2
-
-```bash
-# Start backend
-cd server
-pm2 start src/server.js --name bidding-backend
-
-# Start frontend
-cd ../client
-pm2 serve build 3000 --name bidding-frontend --spa
-
-# Save and enable on boot
-pm2 save
-pm2 startup
-```
-
-Access at `http://<your-vm-ip>:3000`
-
 ## API Endpoints
 
-- **Auth**: `POST /auth/register`, `POST /auth/login`
-- **Users**: `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`
-- **Rooms**: `GET /rooms`, `GET /rooms/:id`, `POST /rooms`, `PATCH /rooms/:id`, `POST /rooms/:id/close`, `DELETE /rooms/:id`
-- **Bids**: `GET /bids/room/:roomId`, `POST /bids/room/:roomId`
+Backend server runs on `http://localhost:6790`
 
-## Troubleshooting
+### Authentication
+- `POST /auth/register` - Register a new user
+- `POST /auth/login` - Login and receive JWT token
 
-```bash
-# Check PM2 status
-pm2 status
-pm2 logs
+### Users
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user by ID
+- `PATCH /users/:id` - Update user (requires JWT)
+- `DELETE /users/:id` - Delete user
 
-# Restart services
-pm2 restart all
+### Rooms (Bidding Items)
+- `GET /rooms` - Get all rooms
+- `GET /rooms/:id` - Get room by ID
+- `GET /rooms/host/:hostId` - Get rooms by host ID
+- `POST /rooms` - Create new room (requires JWT)
+- `PATCH /rooms/:id` - Update room (requires JWT)
+- `POST /rooms/:id/close` - Close room (requires JWT)
+- `DELETE /rooms/:id` - Delete room (requires JWT)
 
-# Check MongoDB
-sudo systemctl status mongod
-```
+### Bids
+- `GET /bids/room/:roomId` - Get all bids for a room
+- `GET /bids/user/:userId` - Get all bids by a user
+- `POST /bids/room/:roomId` - Place a bid (requires JWT)
+
+## Technologies Used
+
+### Backend
+- Node.js + Express.js
+- MongoDB (database)
+- Socket.IO (real-time updates)
+- JWT (authentication)
+- bcrypt (password hashing)
+
+### Frontend
+- React
+- React Router (client-side routing)
+- Socket.IO Client (real-time updates)
+
+## Security Notes
+
+**DO NOT commit these files to Git:**
+- `.env` files (contain secrets and configuration)
+- `jwt.key` and `jwt.key.pub` (authentication keys)
+- `node_modules/` (dependencies)
+
+These are already listed in `.gitignore` to prevent accidental commits.
