@@ -1,10 +1,9 @@
-// COMMENTED OUT FOR NOW - JWT AUTHORIZATION
-// import express from 'express';
-// import { authControllers } from '../controllers/authControllers.js';
+import express from 'express';
+import { authControllers } from '../controllers/authControllers.js';
 
-// const authRouter = express.Router();
+const authRouter = express.Router();
 
-// authRouter.post('/register', authControllers.register);
-// authRouter.post('/login', authControllers.login);
+authRouter.post('/register', authControllers.register);
+authRouter.post('/login', authControllers.login);
 
-// export { authRouter };
+export { authRouter };

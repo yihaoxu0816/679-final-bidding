@@ -1,6 +1,7 @@
 import express from 'express';
 import { roomControllers } from '../controllers/roomControllers.js';
 import { bidControllers } from '../controllers/bidControllers.js';
+import { validateJWT } from '../middleware/validateJWT.js';
 
 const roomRouter = express.Router();
 
@@ -13,23 +14,23 @@ roomRouter.get('/:id', roomControllers.getRoomById);
 // Get rooms by host id
 roomRouter.get('/host/:hostId', roomControllers.getRoomsByHostId);
 
-// Create a room
-roomRouter.post('/', roomControllers.createRoom);
+// Create a room (requires authentication)
+roomRouter.post('/', validateJWT, roomControllers.createRoom);
 
-// Update a room
-roomRouter.patch('/:id', roomControllers.updateRoom);
+// Update a room (requires authentication)
+roomRouter.patch('/:id', validateJWT, roomControllers.updateRoom);
 
-// Close a room (special endpoint)
-roomRouter.post('/:id/close', roomControllers.closeRoom);
+// Close a room (special endpoint - requires authentication)
+roomRouter.post('/:id/close', validateJWT, roomControllers.closeRoom);
 
-// Delete a room
-roomRouter.delete('/:id', roomControllers.deleteRoom);
+// Delete a room (requires authentication)
+roomRouter.delete('/:id', validateJWT, roomControllers.deleteRoom);
 
 // Get bids for a room
 roomRouter.get('/:roomId/bids', bidControllers.getBidsByRoomId);
 
-// Place a bid in a room (nested resource)
-roomRouter.post('/:roomId/bids/user/:userId', bidControllers.placeBid);
+// Place a bid in a room (nested resource - requires authentication)
+roomRouter.post('/:roomId/bids', validateJWT, bidControllers.placeBid);
 
 export { roomRouter };
 

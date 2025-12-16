@@ -1,31 +1,31 @@
-// COMMENTED OUT FOR NOW - JWT AUTHORIZATION
-// import jwt from 'jsonwebtoken';
 
-// let jwtSecretKey, jwtPublicKey;
+import jwt from 'jsonwebtoken';
 
-// const loadKeys = () => {
-//   jwtSecretKey = process.env.JWT_PRIVATE_KEY;
-//   jwtPublicKey = process.env.JWT_PUBLIC_KEY;
-// }
+let jwtSecretKey, jwtPublicKey;
 
-// const validateJWT = (req, res, next) => {
-//   loadKeys();
-//   const authHeader = req.headers['authorization'];
-//   const token = authHeader && authHeader.split(' ')[1];
+const loadKeys = () => {
+  jwtSecretKey = process.env.JWT_PRIVATE_KEY;
+  jwtPublicKey = process.env.JWT_PUBLIC_KEY;
+}
 
-//   if (!token) {
-//       return res.sendStatus(401); // Unauthorized
-//   }
+const validateJWT = (req, res, next) => {
+  loadKeys();
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-//   const payload = jwt.verify(token, jwtPublicKey, { algorithms: ['RS256']});
-//   if (payload?.userId) {
-//     req.userId = payload.userId;
-//     next();
-//   } else {
-//     res.sendStatus(401);
-//   }
-// }
+  if (!token) {
+      return res.sendStatus(401); // Unauthorized
+  }
 
-// export {
-//   validateJWT
-// } 
+  const payload = jwt.verify(token, jwtPublicKey, { algorithms: ['RS256']});
+  if (payload?.userId) {
+    req.userId = payload.userId;
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+}
+
+export {
+  validateJWT
+} 

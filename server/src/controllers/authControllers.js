@@ -1,29 +1,28 @@
-// COMMENTED OUT FOR NOW - JWT AUTHORIZATION
-// import { authService } from '../services/authService.js';
+import { authService } from '../services/authService.js';
 
-// const register = async (req, res) => {
-//     const {username, password, displayName} = req.body;
+const register = async (req, res) => {
+    const {username, password, displayName} = req.body;
 
-//     try {
-//         await authService.registerUser(username, password, displayName);
-//         res.sendStatus(200);
-//     } catch (error) {
-//         res.status(500).json({error});
-//     }
-// }
+    try {
+        await authService.registerUser(username, password, displayName);
+        res.sendStatus(200);
+    } catch (error) {
+        res.status(500).json({error});
+    }
+}
 
-// const login = async (req, res) => {
-//     const {username, password} = req.body;
+const login = async (req, res) => {
+    const {username, password} = req.body;
 
-//     try {
-//         const user = await authService.validateLogin(username, password);
-//         res.status(200).json(user);
-//     } catch (error) {
-//         res.status(401).json({error: error.message});
-//     }
-// }
+    try {
+        const user = await authService.validateLogin(username, password);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(401).json({error: error.message});
+    }
+}
 
-// export const authControllers = {
-//     register,
-//     login,
-// }
+export const authControllers = {
+    register,
+    login,
+}

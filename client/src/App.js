@@ -1,69 +1,68 @@
-// import { createContext, useState } from "react";
-// import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createContext, useState, useEffect } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { io } from "socket.io-client";
 
-// import Root from "./pages/root";
-// import Home from "./pages/home";
-// import Login from "./pages/login";
-// import ManagePosts from "./pages/managePosts";
-// import Admin from "./pages/admin";
-// import ViewPost from "./pages/viewPost";
-// import EditPost from "./pages/editPost";
-// import ErrorBoundary from "./pages/errorHandler";
-// import EditUser from "./pages/editUser";
+import Root from "./pages/root";
+import AllRooms from "./pages/allRooms";
+import BiddingRoom from "./pages/BiddingRoom";
+import CreateEditRoom from "./pages/CreateEditRoom";
+import Profile from "./pages/Profile";
+import Login from "./pages/login";
+import { getCurrentUser } from "./data/users";
 
-// const CurrentUserContext = createContext();
 
-// function App() {
-//   const [currentUser, setCurrentUser] = useState(null);
+const CurrentUserContext = createContext();
 
-//   const router = createBrowserRouter([
-//     {
-//       path: "/",
-//       element: <Root />,
-//       errorElement: <ErrorBoundary />,
-//       children: [
-//         {
-//           index: true,
-//           element: <Home />,
-//         },
-//         {
-//           path: "login",
-//           element: <Login />,
-//         },
-//         {
-//           path: "managePosts",
-//           element: <ManagePosts />,
-//         },
-//         {
-//           path: "admin",
-//           element: <Admin />,
-//         },
-//         {
-//           path: "viewPost/:id",
-//           element: <ViewPost />,
-//         },
-//         {
-//           path: "editPost/:id?",
-//           element: <EditPost />,
-//         },
-//         {
-//           path: "editUser/:id",
-//           element: <EditUser />
-//         },
-//         {
-//           path: "/error",
-//           element: <ErrorBoundary />
-//         }
-//       ],
-//     },
-//   ]);
+function App() {
+  const [currentUser, setCurrentUser] = useState(null);
 
-//   return (
-//     <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-//       <RouterProvider router={router} />
-//     </CurrentUserContext.Provider>
-//   );
-// }
+  // Restore user from localStorage on mount
+  useEffect(() => {
+    const loggedInUser = getCurrentUser();
+    if (loggedInUser) {
+      setCurrentUser(loggedInUser);
+    }
+  }, []);
 
-// export default App;
-// export { CurrentUserContext };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+      children: [
+        {
+          index: true,
+          element: <AllRooms />,
+        },
+        {
+          path: "rooms/new",
+          element: <CreateEditRoom />,
+        },
+        {
+          path: "rooms/:id",
+          element: <BiddingRoom />,
+        },
+        {
+          path: "rooms/:id/edit",
+          element: <CreateEditRoom />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+        }
+      ],
+    },
+  ]);
+
+  return (
+    <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+      <RouterProvider router={router} />
+    </CurrentUserContext.Provider>
+  );
+}
+
+export default App;
+export { CurrentUserContext };

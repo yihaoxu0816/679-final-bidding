@@ -1,71 +1,156 @@
-# SI 679 - Project 1 - Blogtastic
+# Used Goods Bidding Market
 
-In this project you will build the backend for a simple blogging webapp named Blogtastic. 
+A full-stack real-time bidding platform built with Node.js, Express, React, MongoDB, and Socket.IO.
 
-The starter code includes a full-fledged React client that uses mock data within the front end to demonstrate the intended functionality. 
+## Prerequisites
 
-The starter code also includes backend Express app that currently does close to nothing. All it can do is start up, add the `cors()` middleware, and listen on the port specified in server.js. You will need to implement all of the backend routes and REST layers, and then replace the mock data handling functionality in the `/client/src/data` directory to make things work. 
+- Node.js (v18+)
+- MongoDB (v6+)
+- npm (v9+)
 
-## Getting Started
-* clone the repo
-* install npm packages in *both* client and server directories:
+## Installation
+
+```bash
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
 ```
-$ git clone <your repo URL>
-$ cd <your clone dir>
-$ cd client
-$ npm i
-$ cd ../server
-$ npm i
+
+## Environment Configuration
+
+### Server `.env` (in `server/` directory)
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017
+DB_NAME=bidding-platform
+PORT=6790
+NODE_ENV=production
 ```
-* run the client 
+
+### Client `.env` (in `client/` directory)
+
+```env
+# Local development
+REACT_APP_API_URL=http://localhost:6790
+
+# Production (update with your VM IP)
+REACT_APP_API_URL=http://<your-vm-ip>:6790
 ```
-$ cd ../client
-$ npm start
+
+## Build
+
+```bash
+cd client
+npm run build
 ```
-* test it out to get a feel for how it works. Be sure to test what you can do without logging in (i.e., as a non-authenticated user) as well as logging in with a username and password from the mock user data in `/client/src/data/users.js`.
-* run the server
+
+## Run Locally
+
+```bash
+# Start MongoDB
+mongod
+
+# Start backend (in server/)
+npm start
+
+# Start frontend (in client/)
+npm start
 ```
-$ cd ../server
-$ npm start
+
+Access at `http://localhost:3000`
+
+## Run Tests
+
+```bash
+cd server
+npm test
+npm test -- --coverage  # with coverage report
 ```
-* it doesn't really do anything, as you'll see, but you shouldn't see any errors (if you do, review the above steps to see if you missed anything).
 
-## Work on the Project
+## Deploy to Google Cloud VM
 
-### In the client
-You should not have to touch any code outside of `/client/src/data/users.js` and `/client/src/data/posts.js`. You will have to change most of the functions in those files, however, to work with your backend. The only exceptions are the two functions in `posts.js` that explicitly say in the comments that you don't need to change them. 
+### 1. Create VM and Configure Firewall
 
-You also don't need to change anything in `/client/src/data/api.js`, but you will want to familiarize yourself with those functions, as they're the ones you'll need to use in your revised `users.js` and `posts.js` functions to access your backend.
-
-The only other thing you will need to do in the client is create a file named `.env` with the following contents:
-
+```bash
+gcloud compute instances create bidding-platform --zone=us-central1-a --machine-type=e2-medium --image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud
+gcloud compute firewall-rules create allow-app --allow tcp:3000,tcp:6790
 ```
-REACT_APP_API_URL='http://localhost:6790'
+
+### 2. SSH and Install Dependencies
+
+```bash
+gcloud compute ssh bidding-platform --zone=us-central1-a
+
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs git
+
+# Install MongoDB
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update && sudo apt install -y mongodb-org
+sudo systemctl start mongod && sudo systemctl enable mongod
+
+# Install PM2
+sudo npm install -g pm2
 ```
-That's what the contents will be if you don't change the port in your `server.js`, otherwise you'll need to change the URL accordingly. Note that the environment variable name MUST start with REACT_APP_ in order for React's environment variable handling to work. FYI this variable is read in `api.js` on line 1.
 
-### In the server
-Well, in the server, you'll have to do it all, won't you? Build your routes, controllers, services, db access functions, models, etc. -- using what we've covered in the course up to this point. In addition to building the layers and wiring the backend into the frontend, you'll need to 
-* use `bcrypt` to ensure that user passwords are not sent to the backend or stored in the DB in cleartext
-* use `jwt` to ensure that endpoints that allow data modification (i.e., creating/editing/deleting posts and users) cannot be accessed by non-authenticated users
-* write unit and integration tests using `jest` that ensure your backend is robust and accurate. [Note: you do not have to write tests for the front end. If you find bugs, report them on slack.]
+### 3. Deploy Application
 
-## Grading
+```bash
+# Clone and install
+git clone <repository-url>
+cd 679-final-bidding
 
-| No. | Requirement | Points |
-|-----|-------------|--------|
-|1|View all posts (non-authenticated)|10|
-|2|View single post (non-authenticated)|10|
-|3|Log in (unencrypted, superceded by #10) |5|
-|4|Create post|25|
-|5|Modify post|25|
-|6|Delete post|20|
-|7|Create user|25|
-|8|Update user|25|
-|9|Delete user|20|
-|10|Encrypted login and password storage|25|
-|11|Protect routes with JWT|25|
-|12|Well designed unit tests, >80% coverage|25|
-|13|Employ REST best practices (route names, layers)|30|
-|14|Code readability, organization, and style|30|
-| | **Total** | 300 |
+cd server
+npm install
+# Create .env file with production settings
+
+cd ../client
+npm install
+# Update .env with VM IP
+npm run build
+```
+
+### 4. Start with PM2
+
+```bash
+# Start backend
+cd server
+pm2 start src/server.js --name bidding-backend
+
+# Start frontend
+cd ../client
+pm2 serve build 3000 --name bidding-frontend --spa
+
+# Save and enable on boot
+pm2 save
+pm2 startup
+```
+
+Access at `http://<your-vm-ip>:3000`
+
+## API Endpoints
+
+- **Auth**: `POST /auth/register`, `POST /auth/login`
+- **Users**: `GET /users`, `GET /users/:id`, `PATCH /users/:id`, `DELETE /users/:id`
+- **Rooms**: `GET /rooms`, `GET /rooms/:id`, `POST /rooms`, `PATCH /rooms/:id`, `POST /rooms/:id/close`, `DELETE /rooms/:id`
+- **Bids**: `GET /bids/room/:roomId`, `POST /bids/room/:roomId`
+
+## Troubleshooting
+
+```bash
+# Check PM2 status
+pm2 status
+pm2 logs
+
+# Restart services
+pm2 restart all
+
+# Check MongoDB
+sudo systemctl status mongod
+```

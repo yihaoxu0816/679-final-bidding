@@ -21,6 +21,26 @@ const init = async () => {
     theDb = mongoClient.db(dbName);
 }
 
+const watchCollection = async (collectionName, callback = () => {}) => {
+  // Ensure database is initialized
+  if (!mongoClient || !theDb) { 
+    await init(); 
+  }
+  
+  const changeStream = theDb.collection(collectionName).watch();
+
+  changeStream.on('change', (change) => {
+    console.log(change);
+    callback(change);
+  });
+  console.log('watching collection', collectionName);
+  return changeStream;
+}
+
+const closeChangeStream = async (changeStream) => {
+  changeStream.close();
+}
+
 const getAllInCollection = async (collectionName) => {
     if (!mongoClient) { await init(); }
     const allDocs = await theDb.collection(collectionName).find();
@@ -85,6 +105,8 @@ const getAllInCollection = async (collectionName) => {
   export const db = {
     init, 
     // close,
+    watchCollection, 
+    closeChangeStream,
     getAllInCollection, 
     getFromCollectionById,
     addToCollection,

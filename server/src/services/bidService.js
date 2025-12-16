@@ -2,6 +2,39 @@ import { db } from '../db/db.js';
 import { Bid } from '../models/bid.js';
 import { User } from '../models/user.js';
 import { Room } from '../models/room.js';
+import { socket } from '../socket/clientUpdate.js';
+
+let changeStream = null;
+const watchBids = async () => {
+  const callback = (change) => {
+    if (change.operationType === 'update') {
+      console.log('change', change.updateDescription.updatedFields);
+      socket.updateBid(
+        change.documentKey._id.toString(), 
+        change.updateDescription.updatedFields 
+      );
+    }
+    
+    if (change.operationType === 'insert') {
+      console.log('new bid inserted', change.fullDocument);
+      const bid = Bid.fromBidDocument(change.fullDocument);
+      socket.addBid(bid);
+    }
+
+    if (change.operationType === 'delete') {
+      console.log('bid deleted', change.documentKey._id.toString());
+      socket.deleteBid(change.documentKey._id.toString());
+    }
+    
+  };
+  changeStream = await db.watchCollection(db.BIDS, callback);
+  console.log('watching bids');
+}
+
+const stopWatchingBids = async () => {
+  await db.closeChangeStream(changeStream);
+  changeStream = null;
+}
 
 const getBidsByRoomId = async (roomId) => {
     if (!roomId) throw new Error('Null or undefined room ID not allowed.');
@@ -48,7 +81,7 @@ const placeBid = async (bidInfo) => {
 
     // Verify user is not the host
     if (room.hostId === bidInfo.userId) {
-        throw new Error('Host cannot bid on their own room.');
+        throw new Error("You can't make a bid in your own room");
     }
 
     // Verify bid is higher than current highest bid
@@ -91,5 +124,8 @@ export const bidService = {
     getBidsByRoomId,
     getBidsByUserId,
     placeBid,
+    watchBids, 
+    stopWatchingBids
+    
 }
 

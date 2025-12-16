@@ -1,0 +1,292 @@
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.profile-container h1 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 24px;
+}
+
+.profile-info-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.profile-info-card h2 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.info-value {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.balance-value {
+  color: #2563eb;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.profile-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-section h2 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.create-room-button {
+  padding: 10px 20px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.create-room-button:hover {
+  background-color: #059669;
+}
+
+.empty-message {
+  color: #6b7280;
+  text-align: center;
+  padding: 32px;
+  font-style: italic;
+}
+
+.rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.room-item {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.room-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.room-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.room-item-header h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.status-open {
+  background-color: #10b981;
+  color: white;
+}
+
+.status-closed {
+  background-color: #ef4444;
+  color: white;
+}
+
+.room-item-description {
+  color: #4b5563;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.room-item-info {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.room-item-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.actions-left {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-button {
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.close-button {
+  padding: 10px 20px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: #dc2626;
+}
+
+.delete-button {
+  padding: 10px 20px;
+  background: none;
+  color: #ef4444;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.delete-button:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+.items-won-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.won-item-card {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.won-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.won-item-card h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  text-align: left;
+}
+
+.won-item-card p {
+  color: #4b5563;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.won-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.won-amount {
+  font-weight: 700;
+  color: #92400e;
+  font-size: 1.1rem;
+}
+
+.won-date {
+  font-size: 0.875rem;
+  color: #78350f;
+}
+
+@media (max-width: 768px) {
+  .room-item-actions {
+    flex-direction: column;
+  }
+
+  .actions-left {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .edit-button,
+  .close-button,
+  .delete-button {
+    width: 100%;
+  }
+
+  .items-won-list {
+    grid-template-columns: 1fr;
+  }
+}
+

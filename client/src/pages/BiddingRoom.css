@@ -1,0 +1,250 @@
+.bidding-room-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 8px 0;
+  margin-bottom: 24px;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.room-detail-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.room-status-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.room-host {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.room-title {
+  font-size: 2.5rem;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  font-weight: 700;
+}
+
+.room-description {
+  font-size: 1.1rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+}
+
+.price-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.price-box {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.price-box.highlight {
+  background-color: #eff6ff;
+  border: 2px solid #2563eb;
+}
+
+.price-label {
+  display: block;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.price-amount {
+  display: block;
+  font-size: 2rem;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.price-box.highlight .price-amount {
+  color: #2563eb;
+}
+
+.bid-form {
+  border-top: 2px solid #e5e7eb;
+  padding-top: 32px;
+}
+
+.bid-form h3 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.bid-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dollar-sign {
+  font-size: 1.5rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.bid-input-group input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: border-color 0.2s;
+}
+
+.bid-input-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.bid-input-group button {
+  padding: 14px 32px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.bid-input-group button:hover {
+  background-color: #1d4ed8;
+}
+
+.room-closed-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  border-top: 2px solid #e5e7eb;
+  margin-top: 32px;
+}
+
+.bidding-history-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+}
+
+.bidding-history-section h2 {
+  font-size: 1.75rem;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+}
+
+.no-bids {
+  color: #6b7280;
+  text-align: center;
+  padding: 32px;
+  font-style: italic;
+}
+
+.bids-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bid-card {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.bid-card:hover {
+  background-color: #f3f4f6;
+}
+
+.bid-card:first-child {
+  background-color: #fef3c7;
+  border-left: 4px solid #f59e0b;
+}
+
+.bid-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.bid-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.bid-user {
+  font-size: 0.95rem;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.bid-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .price-section {
+    grid-template-columns: 1fr;
+  }
+
+  .bid-input-group {
+    flex-direction: column;
+  }
+
+  .bid-input-group button {
+    width: 100%;
+  }
+
+  .room-title {
+    font-size: 2rem;
+  }
+}
+

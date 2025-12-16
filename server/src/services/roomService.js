@@ -1,6 +1,40 @@
 import { db } from '../db/db.js';
 import { Room } from '../models/room.js';
 import { User } from '../models/user.js';
+import { socket } from '../socket/clientUpdate.js';
+
+let changeStream = null;
+
+const watchRooms = async () => {
+  const callback = (change) => {
+    if (change.operationType === 'update') {
+      console.log('change', change.updateDescription.updatedFields);
+      socket.updateRoom(
+        change.documentKey._id.toString(), 
+        change.updateDescription.updatedFields 
+      );
+    }
+    
+    if (change.operationType === 'insert') {
+      console.log('new room inserted', change.fullDocument);
+      const room = Room.fromRoomDocument(change.fullDocument);
+      socket.addRoom(room);
+    }
+
+    if (change.operationType === 'delete') {
+      console.log('room deleted', change.documentKey._id.toString());
+      socket.deleteRoom(change.documentKey._id.toString());
+    }
+    
+  };
+  changeStream = await db.watchCollection(db.ROOMS, callback);
+  console.log('watching rooms');
+}
+
+const stopWatchingRooms = async () => {
+  await db.closeChangeStream(changeStream);
+  changeStream = null;
+}
 
 const getAllRooms = async () => {
     const roomDocs = await db.getAllInCollection(db.ROOMS);
@@ -129,5 +163,7 @@ export const roomService = {
     updateRoom,
     closeRoom,
     deleteRoom,
+    watchRooms,
+    stopWatchingRooms
 }
 
